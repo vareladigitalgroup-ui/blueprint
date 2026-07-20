@@ -342,6 +342,16 @@ Empezá confirmando que entendés y pidiéndome los documentos.</pre>
           <li><b>Quiz funnel</b> con Inlead — te apegás al funnel del brasileño que modelás (el que llega al final convierte 25–30%). <b>Optimizá imágenes</b> (Squoosh→TinyPNG) y poné <b>lazy load</b>.</li>
           <li><b>VSL:</b> avatar de IA + hosting en PandaVideo (barra ficticia + reanudar + liviano). Cortá silencios + b-rolls cada 3–5 s.</li>
         </ul>
+        <div style="margin:1rem 0 .2rem;background:var(--box);border:1px solid var(--line-2);border-radius:8px;padding:.9rem 1.1rem">
+          <div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem">Cómo se arma el VSL (avatar IA · método de Santi)</div>
+          <div style="display:grid;gap:.45rem;font-size:.92rem;color:var(--ink);line-height:1.5">
+            <div><strong>1 ·</strong> Escribí todo el guión y generá los <strong>audios con ElevenLabs</strong> (voz de persona mayor/autoridad; si es largo, en 2-4 tramos).</div>
+            <div><strong>2 ·</strong> La <strong>imagen del avatar es la base</strong>: en ChatGPT pedí <strong>2-3 variantes con distintas poses</strong> (más input = avatar más consistente).</div>
+            <div><strong>3 ·</strong> En <strong>HeyGen</strong>: subís las fotos (9:16) y <strong>clonás la voz</strong> con el audio.</div>
+            <div><strong>4 ·</strong> <strong>No escribís el guión</strong>: subís los <strong>audios de ElevenLabs</strong> y HeyGen los <strong>transcribe y sincroniza</strong> → así <strong>el VSL se crea a partir de los audios</strong> (una escena por audio).</div>
+            <div><strong>5 ·</strong> Lo <strong>alojás en PandaVideo</strong> (lo pegás como código HTML en la landing: barra ficticia + reanudar + liviano) y <strong>editás</strong>: cortá silencios + b-rolls cada 3-5 s.</div>
+          </div>
+        </div>
         <div class="tpls">
           <div class="tpl-lead">Plantillas HTML — código real de Santi</div>
           <details class="disc">
