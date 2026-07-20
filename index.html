@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Launch Expert — El Método</title>
+<style>
+  :root{
+    color-scheme: light;
+    --paper:#FFFFFF; --ink:#1A1A19; --muted:#6A6A66; --faint:#9A9A95;
+    --line:#E6E6E2; --line-2:#D6D6D1; --box:#F7F7F5; --box-2:#F0F0EC;
+    --mark:#111111;
+    --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    --mono:"Cascadia Code",ui-monospace,Consolas,"Courier New",monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+    font-size:16.5px;line-height:1.65;letter-spacing:0}
+  ::selection{background:#111;color:#fff}
+  a{color:var(--ink);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+  a:hover{text-decoration-thickness:2px}
+  .wrap{max-width:720px;margin:0 auto;padding:0 1.4rem}
+
+  /* subrayado de lo importante */
+  b, strong{font-weight:600}
+  .step-body li b, .hero-lede b, .route .a b, .manifesto .q b, .metricbox b{
+    font-weight:600;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:2.5px;text-decoration-color:#111}
+
+  /* top bar minimal */
+  .bar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  .bar-in{max-width:720px;margin:0 auto;padding:.7rem 1.4rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+  .brand{display:flex;align-items:center;gap:.55rem;font-weight:700;font-size:.95rem}
+  .brand .dot{width:.55rem;height:.55rem;border-radius:50%;background:#111}
+  .brand small{font-family:var(--mono);font-weight:400;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .bar-cta{font-family:var(--mono);font-size:.7rem;letter-spacing:.03em;color:var(--muted)}
+  .bar-cta b{color:var(--ink)}
+
+  /* hero simple */
+  .hero{padding:3.4rem 0 2.2rem;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:0 0 1rem}
+  .eyebrow::before{display:none}
+  h1{font-size:clamp(1.9rem,5vw,2.7rem);line-height:1.08;font-weight:700;letter-spacing:-.02em;margin:0;text-wrap:balance}
+  h1 .em{font-style:normal;font-weight:700;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:5px}
+  .hero-lede{max-width:62ch;color:var(--muted);font-size:1.05rem;margin:1.2rem 0 0}
+  .hero-lede b{color:var(--ink)}
+  .figure{margin:1.8rem 0 0;display:flex;align-items:baseline;gap:.9rem}
+  .fig-num{font-family:var(--sans);font-weight:700;font-size:2.4rem;line-height:1;letter-spacing:-.03em;color:var(--ink);text-shadow:none;font-variant-numeric:tabular-nums}
+  .fig-cap .k{font-family:var(--mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+  .fig-cap .v{font-size:.92rem;color:var(--muted)}
+  .ticker{display:none}
+
+  /* section label */
+  .sec-label{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);
+    display:flex;align-items:center;gap:.8rem;margin:3rem 0 1rem}
+  .sec-label::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  /* steps */
+  .step{padding:1.7rem 0;border-top:1px solid var(--line)}
+  .step:first-child{border-top:none}
+  .step-top{display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:baseline}
+  .step-n{font-family:var(--mono);font-weight:700;font-size:1.3rem;line-height:1;color:var(--faint);font-variant-numeric:tabular-nums;min-width:2.4ch}
+  .step.val .step-n{color:var(--ink)}
+  .step h2{font-size:1.35rem;font-weight:700;letter-spacing:-.01em;margin:0;line-height:1.2}
+  .step .kicker{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:.35rem}
+  .step-body{padding-left:calc(2.4ch + 1rem);margin-top:.9rem}
+  @media (max-width:620px){.step-body{padding-left:0}}
+  .step-body ul{margin:0;padding:0;list-style:none;display:grid;gap:.6rem}
+  .step-body li{position:relative;padding-left:1.1rem;color:var(--ink);font-size:.98rem}
+  .step-body li::before{content:"–";position:absolute;left:0;top:0;color:var(--faint)}
+  .step.val .step-body li::before{content:"–"}
+  .quote{margin-top:1rem;padding-left:.9rem;border-left:3px solid #111;color:var(--muted);font-style:italic;font-size:.94rem}
+
+  /* routes */
+  .routes{display:grid;gap:.4rem;margin-top:.3rem}
+  .route{display:grid;grid-template-columns:minmax(6.5rem,auto) auto 1fr;gap:.7rem;align-items:baseline;
+    border:1px solid var(--line);border-radius:6px;padding:.5rem .8rem;font-size:.88rem;background:var(--paper)}
+  .route .de{font-weight:600;color:var(--ink)}
+  .route .fl{color:var(--faint)}
+  .route .a{color:var(--muted)}
+  .route .a b{color:var(--ink)}
+  .route.hot{border-color:#111;background:var(--box)}
+
+  /* resources */
+  .res{margin-top:1.3rem;display:grid;gap:.55rem}
+  .res-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:.45rem .6rem;font-size:.85rem}
+  .tag{font-family:var(--mono);font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+    padding:.18rem .45rem;border-radius:4px;white-space:nowrap;background:var(--box-2);color:var(--muted);border:1px solid var(--line)}
+  .res-line .items{color:var(--muted);display:flex;flex-wrap:wrap;gap:.3rem .5rem;align-items:baseline}
+  .watch{display:inline-flex;align-items:center;gap:.3rem;font-size:.84rem;color:var(--ink);text-decoration:underline;text-underline-offset:2px}
+  .watch .ic{text-decoration:none;font-size:.7rem}
+  .lk{color:var(--ink)}
+  .items b{color:var(--ink) !important}
+
+  /* code / prompts */
+  .code{margin:1rem 0 .2rem;border:1px solid var(--line-2);border-radius:8px;overflow:hidden;background:var(--box)}
+  .code-head{display:flex;align-items:center;justify-content:space-between;padding:.5rem .75rem;border-bottom:1px solid var(--line);background:var(--box-2)}
+  .code-head .lbl{font-family:var(--mono);font-size:.68rem;letter-spacing:.04em;text-transform:none;color:var(--muted)}
+  .code-head .lbl::before{content:""}
+  .copy{font-family:var(--sans);font-size:.72rem;font-weight:600;color:#fff;background:#111;border:none;border-radius:5px;padding:.3rem .7rem;cursor:pointer}
+  .copy:hover{background:#333}
+  .copy.ok{background:#2e7d46}
+  pre{margin:0;color:#242423;font-family:var(--mono);font-size:12.5px;line-height:1.55;padding:.85rem .9rem;overflow-x:auto;white-space:pre-wrap;word-break:break-word;max-height:340px;background:var(--box)}
+  pre.tpl{white-space:pre;word-break:normal;max-height:420px}
+
+  /* metric box */
+  .metricbox{margin:1rem 0 .2rem;background:var(--box);border:1px solid var(--line-2);border-radius:8px;padding:.9rem 1rem}
+  .metricbox .h{font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+  .metricbox pre{background:none;padding:0;color:var(--ink);font-size:12.5px;white-space:pre-wrap}
+  .metricbox .g{color:var(--ink);font-weight:600}
+
+  /* templates disclosure */
+  .tpls{margin-top:1.4rem;display:grid;gap:.5rem}
+  .tpl-lead{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.1rem}
+  details.disc{border:1px solid var(--line-2);border-radius:8px;overflow:hidden;background:var(--paper)}
+  details.disc>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:.75rem;padding:.8rem .95rem}
+  details.disc>summary::-webkit-details-marker{display:none}
+  details.disc>summary:hover{background:var(--box)}
+  .disc-ic{width:1.9rem;height:1.9rem;flex-shrink:0;border-radius:6px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:.72rem}
+  .disc-t{flex:1}
+  .disc-t b{display:block;font-weight:600;font-size:.95rem;color:var(--ink)}
+  .disc-t span{font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+  .disc-act{font-family:var(--mono);font-size:.7rem;color:var(--muted);text-decoration:underline;text-underline-offset:2px}
+
+  /* tools */
+  .tools{display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem}
+  @media (max-width:620px){.tools{grid-template-columns:1fr}}
+  .tool{display:flex;flex-direction:column;gap:.1rem;background:var(--paper);border:1px solid var(--line);border-radius:7px;padding:.75rem .9rem;text-decoration:none}
+  .tool:hover{border-color:#111}
+  .tool .tn{font-weight:600;color:var(--ink);font-size:.9rem;text-decoration:underline;text-underline-offset:2px}
+  .tool .td{font-size:.78rem;color:var(--muted)}
+  .tool .tn::after{content:""}
+
+  /* manifesto (nota de cierre limpia) */
+  .manifesto{margin:3rem 0 1rem;padding:1.6rem 1.7rem;border:1px solid #111;border-radius:10px;background:var(--box)}
+  .manifesto::before{display:none}
+  .manifesto .in{position:relative}
+  .manifesto .q{font-size:clamp(1.15rem,2.8vw,1.4rem);font-weight:600;line-height:1.35;letter-spacing:-.01em;margin:0;text-wrap:balance}
+  .manifesto .sub{margin:.8rem 0 0;color:var(--muted);max-width:60ch;font-size:.95rem}
+
+  footer{margin:2.4rem 0 3.5rem;padding-top:1.2rem;border-top:1px solid var(--line);color:var(--faint);font-size:.8rem}
+  footer b{color:var(--muted)}
+
+  /* reveal off — documento estatico y limpio */
+  .rv{opacity:1;transform:none}
+
+  @media print{
+    .bar{display:none}
+    body{font-size:12px}
+    .step,.manifesto{break-inside:avoid}
+    .copy{display:none}
+    pre{max-height:none}
+    a{text-decoration:underline}
+  }
+
+
+  #gate{position:fixed;inset:0;z-index:100;background:#fff;display:flex;align-items:center;justify-content:center;padding:1.4rem}
+  #gate.hide{display:none}
+  .gate-card{max-width:420px;width:100%;border:1px solid var(--line-2);border-radius:14px;padding:2.2rem 1.9rem;background:#fff;box-shadow:0 12px 44px rgba(0,0,0,.09)}
+  .gate-card .gk{font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:0 0 .9rem}
+  .gate-card h3{font-size:1.55rem;font-weight:700;letter-spacing:-.02em;margin:0 0 .6rem;line-height:1.12}
+  .gate-card .ps{color:var(--muted);font-size:.92rem;margin:0 0 1.3rem}
+  .gate-card input[type=email]{width:100%;font-family:var(--sans);font-size:1rem;padding:.78rem .9rem;border:1px solid var(--line-2);border-radius:8px;margin-bottom:.7rem;color:var(--ink)}
+  .gate-card input[type=email]:focus{outline:none;border-color:#111}
+  .gate-err{color:#c0392b;font-size:.8rem;margin:0 0 .7rem;min-height:1em}
+  .gate-agree{display:flex;gap:.55rem;align-items:flex-start;font-size:.82rem;color:var(--muted);margin-bottom:1.1rem;cursor:pointer}
+  .gate-agree input{margin-top:.25rem;flex-shrink:0}
+  .gate-card button{width:100%;font-family:var(--sans);font-size:.98rem;font-weight:600;color:#fff;background:#111;border:none;border-radius:8px;padding:.85rem;cursor:pointer}
+  .gate-card button:hover{background:#333}
+  .gate-note{font-size:.72rem;color:var(--faint);margin:1rem 0 0;line-height:1.45}
+  .wm{position:fixed;bottom:0;left:0;right:0;z-index:30;font-family:var(--mono);font-size:.64rem;color:var(--faint);background:rgba(255,255,255,.92);border-top:1px solid var(--line);padding:.35rem 1rem;text-align:center;backdrop-filter:blur(4px)}
+  .wm b{color:var(--muted)}
+  body.gated{overflow:hidden}
+</style>
+</head>
+<body class="gated">
+<div id="gate">
+  <div class="gate-card">
+    <p class="gk">Acceso personal</p>
+    <h3>Hacé el blueprint que te hará rico</h3>
+    <p class="ps">Dejá tu correo y entrá. Es de acceso personal — por favor no lo compartas.</p>
+    <input type="email" id="gemail" placeholder="tu@correo.com" autocomplete="email">
+    <div class="gate-err" id="gerr"></div>
+    <label class="gate-agree"><input type="checkbox" id="gchk"><span>Me comprometo a no compartir este material.</span></label>
+    <button id="gbtn">Entrar al método →</button>
+    <p class="gate-note">Tu acceso queda vinculado a tu correo (aparece al pie). Gracias por no compartir el link.</p>
+  </div>
+</div>
+<div class="wm" id="wm" style="display:none">Acceso personal · <b id="wmail"></b></div>
+
+
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="brand"><span class="dot"></span>Launch Expert <small>· el método</small></div>
+    <div class="bar-cta">Objetivo <b>0 → 40K</b> /mes neto</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <p class="eyebrow">Playbook · Santi Bilbao</p>
+    <h1>Modelá lo que <span class="em">ya funciona</span>.<br>Escalá hasta ser libre.</h1>
+    <p class="hero-lede">El método completo, paso por paso: espiás ofertas que ya imprimen dinero, las <b>modelás mejoradas</b> con Claude, lanzás rápido con un MVP y —cuando una pega— montás el backend y escalás. La disciplina: <b>3–4 ofertas por semana hasta pegar una.</b></p>
+    <div class="figure">
+      <div class="fig-num" data-count="40">0</div>
+      <div class="fig-cap">
+        <div class="k">K / mes · neto</div>
+        <div class="v">Lo que logran sus alumnos siguiendo el blueprint.</div>
+      </div>
+    </div>
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span><b>MODELAR</b> — no inventar</span><span>CTR <b>&gt;1.5%</b></span><span>Landing <b>2.5–3%</b></span><span>Front barato + <span class="g">backend fuerte</span></span><span>AOV <span class="g">1.5×</span> frontend</span><span><b>3–4</b> ofertas / semana</span><span>Test <b>$100</b> por oferta</span><span>RPC <b>&gt;</b> CPC = <span class="g">imprimís</span></span>
+        <span><b>MODELAR</b> — no inventar</span><span>CTR <b>&gt;1.5%</b></span><span>Landing <b>2.5–3%</b></span><span>Front barato + <span class="g">backend fuerte</span></span><span>AOV <span class="g">1.5×</span> frontend</span><span><b>3–4</b> ofertas / semana</span><span>Test <b>$100</b> por oferta</span><span>RPC <b>&gt;</b> CPC = <span class="g">imprimís</span></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="sec-label rv">El recorrido · 8 pasos</div>
+
+  <div class="ledger">
+
+    <!-- 1 -->
+    <section class="step rv">
+      <div class="step-top"><div class="step-n">01</div><div><h2>Espionaje de ofertas</h2><div class="kicker">Funnel hacking · acá va la mayor parte del tiempo</div></div></div>
+      <div class="step-body">
+        <ul>
+          <li>Viví en el <b>Ad Library</b> + scrapers. Buscá ofertas <b>low-ticket ($7–$47)</b> ya validadas: ebooks, plantillas Notion, Excels, guías PDF.</li>
+          <li><b>El filtro que lo cambia todo: "3 días antes".</b> Si un anuncio lleva +3 días corriendo, es porque vende. Menos de 3 = está testeando.</li>
+          <li>Señales de winner: <b>+30 anuncios activos</b>, activos <b>10–20 días</b>, todos los creativos a la <b>misma landing</b>. Evitá marcas personales.</li>
+          <li>Guardá los URL de las mejores y revisalas a los <b>2–3 días</b>: ¿subió el nº de anuncios? = más validación.</li>
+          <li>Buscá en <b>Brasil / EE.UU.</b> para modelar hacia tu mercado. Traducí la keyword al idioma del país.</li>
+        </ul>
+        <div class="code">
+          <div class="code-head"><span class="lbl">Prompt · keywords para espiar (pegalo en Claude)</span><button class="copy">Copiar</button></div>
+          <pre>Asume el rol de un Senior Growth Hacker y Analista de Inteligencia Competitiva experto en Meta Ads. Tu función principal es la extracción de datos y detección de tendencias en la Facebook Ads Library y herramientas de scraping como Adspar.
+Objetivo: Localizar con precisión quirúrgica ofertas Low Ticket (productos digitales de entre $7 y $47 USD) validadas por el mercado (anuncios con alta permanencia).
+Metodología en cuatro ejes:
+- Por Formato: E-books, plantillas de Notion, Excel/Google Sheets, Guías PDF.
+- Por Disparadores (Hooks): palabras de compra impulsiva y bajo coste.
+- Por Validación de Tiempo: anuncios activos +10 días (embudo rentable).
+- Por Footprints Técnicos: pasarelas de pago y hosting de infoproductos (Hotmart, Gumroad, Payhip).
+Salida: listado exhaustivo de keywords en tabla (Categoría, Keyword, Razón). Cierra con filtros técnicos para Adspar.</pre>
+        </div>
+        <div class="res">
+          <div class="res-line"><span class="tag cls">Clase</span><div class="items"><a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/7026748" target="_blank" rel="noopener"><span class="ic">▶</span> Funnel Hacking</a></div></div>
+          <div class="res-line"><span class="tag tool">Tools</span><div class="items"><a class="lk" href="https://www.facebook.com/ads/library/" target="_blank" rel="noopener">Ad Library</a><a class="lk" href="https://adsparo.com" target="_blank" rel="noopener">Adsparo</a><span>Minea · GetHook · ScaleBus · Swipe Files</span></div></div>
+          <div class="res-line"><span class="tag doc">Doc</span><div class="items"><a class="lk" href="https://docs.google.com/document/d/1k-7celtS1dpA2v-FiyW5lvIAM5UYsX4hwFRwS8eqtcE/edit" target="_blank" rel="noopener">Documentos Fundamentales — SOP</a></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="step rv">
+      <div class="step-top"><div class="step-n">02</div><div><h2>Modelá de otros mercados</h2><div class="kicker">Cambiá la oferta de mercado</div></div></div>
+      <div class="step-body">
+        <p style="color:var(--muted);font-size:.9rem;margin:0 0 .3rem">Solo investiga: Brasil, Argentina, LATAM, inglés, italiano, francés.</p>
+        <div class="routes">
+          <div class="route"><span class="de">Brasil</span><span class="fl">→</span><span class="a">lanzá en <b>LATAM</b> o <b>inglés</b></span></div>
+          <div class="route"><span class="de">Argentina</span><span class="fl">→</span><span class="a"><b>inglés</b> y <b>LATAM</b> · si funciona: Francia e Italia</span></div>
+          <div class="route"><span class="de">LATAM</span><span class="fl">→</span><span class="a"><b>inglés</b> directo</span></div>
+          <div class="route"><span class="de">Quizzes</span><span class="fl">→</span><span class="a">modelá de <b>Brasil</b>, lanzá en <b>Argentina</b> (lo único que corre ahí)</span></div>
+          <div class="route hot"><span class="de">Si empezás</span><span class="fl">→</span><span class="a">lanzá en <b>habla hispana / LATAM</b></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section class="step rv">
+      <div class="step-top"><div class="step-n">03</div><div><h2>Modelá la oferta irresistible</h2><div class="kicker">Full Claude · modelar = mejorar, no copiar</div></div></div>
+      <div class="step-body">
+        <ul>
+          <li>Si tiene ~100 anuncios activos, está validada → la modelás y la <b>mejorás</b> (como Samsung copió al Apple Vision ya validado).</li>
+          <li><b>Jugada maestra:</b> lo que el competidor vende como order bumps/upsells, metelo GRATIS en la oferta → <b>3x1 "comprá uno y llevate tres"</b> + bonus.</li>
+          <li>Meta: que cada persona que entra a la landing <b>se sienta estúpida por no comprar</b>.</li>
+          <li>Números objetivo: landing que convierta <b>2.5–3%</b> + creativos con <b>CPC barato</b>. Velocidad = tu ventaja.</li>
+          <li><b>Investigación profunda (opcional, es oro):</b> capturás la landing con FireShot → <b>Claude</b> hace deep research (~22 págs) → Avatar → Offer Brief → Creencias. Alimentan copy, imágenes y guiones.</li>
+        </ul>
+        <div class="code">
+          <div class="code-head"><span class="lbl">Prompt · crear la oferta y los entregables</span><button class="copy">Copiar</button></div>
+          <pre>Quiero modelar una oferta que se está corriendo en Brasil para lanzarla en Argentina (o el mercado que sea). Conviértete en un experto en creación de ofertas irresistibles. Ayúdame a crear en primer lugar los ENTREGABLES de la oferta (productos, bonus, etc.). Ten en cuenta que lo que vamos a vender es LOW TICKET (ebook, PDF, plantillas, Excels).
+Te dejo el copy de la página de ventas de la oferta que voy a modelar:
+[PEGA AQUÍ EL COPY COMPLETO DE LA LANDING DEL COMPETIDOR]</pre>
+        </div>
+        <div class="code">
+          <div class="code-head"><span class="lbl">Prompt bonus · asesor brutalmente honesto</span><button class="copy">Copiar</button></div>
+          <pre>De ahora en adelante necesito verdad, no consuelo. Quiero que me desafíes, que cuestiones mis excusas, que me demuestres mis puntos ciegos. Si me estoy mintiendo o pensando en pequeño, decímelo sin filtro. No me des respuestas tibias: prefiero una verdad incómoda a una mentira cómoda. Si mis planes tienen fallas, destrozálos antes de que el mercado lo haga. Actuá como un asesor estratégico brutalmente honesto que prioriza mis resultados a largo plazo sobre mi comodidad a corto plazo. Mi ego no es tu responsabilidad, mi crecimiento sí.</pre>
+        </div>
+        <div class="res">
+          <div class="res-line"><span class="tag cls">Clases</span><div class="items">
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/7051755" target="_blank" rel="noopener"><span class="ic">▶</span> Selección</a>
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/7051766" target="_blank" rel="noopener"><span class="ic">▶</span> Modelar</a>
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/8684661" target="_blank" rel="noopener"><span class="ic">▶</span> Investigación Profunda</a>
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/8840145" target="_blank" rel="noopener"><span class="ic">▶</span> Blueprint c/Investig.</a>
+          </div></div>
+          <div class="res-line"><span class="tag tool">Tools</span><div class="items"><b style="color:var(--paper)">Claude</b> <span>(todo: investigación, modelado, copy)</span> · <a class="lk" href="https://promptcowboy.ai" target="_blank" rel="noopener">PromptCowboy</a> · FireShot</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="step rv">
+      <div class="step-top"><div class="step-n">04</div><div><h2>Creativos: mismo formato exacto</h2><div class="kicker">Extremadamente importante</div></div></div>
+      <div class="step-body">
+        <ul>
+          <li>Usá <b>exactamente el mismo formato creativo</b> del competidor. Si hace voz en off + visuales, hacés eso.</li>
+          <li>Proceso: <b>descargar sus guiones → mejorarlos con Claude → producir el mismo formato</b>.</li>
+          <li>Mockups: <b>Claude arma el prompt</b> → la imagen se genera con ChatGPT o Higgsfield (Claude no genera imágenes).</li>
+        </ul>
+        <div class="code">
+          <div class="code-head"><span class="lbl">Prompt · imágenes / anuncios (director creativo)</span><button class="copy">Copiar</button></div>
+          <pre>Sos un director creativo de clase mundial y experto en generación de imágenes, trabajando para [MARCA], del nicho [NICHO] que [QUÉ VENDÉS Y A QUIÉN].
+ROL: analizar insumos y generar prompts de texto a imagen para anuncios de alto rendimiento de productos digitales (estáticos, comparativos error/solución, antes/después, producto en uso, lifestyle, conceptuales).
+FLUJO: subo 4 documentos fundamentales (Estrategia, Copy de respuesta directa, Avatar/psicología, Dirección creativa) + ejemplos de anuncios (competidores, tests, referencias). Vos: analizás, recreás los conceptos adaptados y mejorados a la marca; que diseño, layout y mood coincidan con la audiencia. Avanzá y ejecutá.
+REQUISITOS: formato 1:1. Mockups de producto (pantallas, dashboards, frameworks), modelos realistas (no "gurús stock"), resultados visuales claros. Evitá el look de stock. Alto contraste que frene el scroll, foco en conversión.
+TONO: alineado al documento de investigación. Claridad, sistema, honestidad, diferenciación real.
+Empezá confirmando que entendés y pidiéndome los documentos.</pre>
+        </div>
+        <div class="res">
+          <div class="res-line"><span class="tag cls">Clases</span><div class="items">
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/7065470" target="_blank" rel="noopener"><span class="ic">▶</span> Mockups</a>
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/10231826" target="_blank" rel="noopener"><span class="ic">▶</span> Revivir un Winner</a>
+          </div></div>
+          <div class="res-line"><span class="tag tool">Tools</span><div class="items"><b style="color:var(--paper)">Claude</b> <span>(guiones y prompts)</span> · ChatGPT / Higgsfield <span>(imagen)</span> · WhisperFlow</div></div>
+          <div class="res-line"><span class="tag doc">Doc</span><div class="items"><a class="lk" href="https://docs.google.com/document/d/1Iwj8tJSy6RWg31TYbQWhE8s-QhLKAbNGDhE80lXfkVM/edit" target="_blank" rel="noopener">Prompt Imágenes</a></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section class="step rv">
+      <div class="step-top"><div class="step-n">05</div><div><h2>Landing page</h2><div class="kicker">100% HTML con Claude · estructura ganadora</div></div></div>
+      <div class="step-body">
+        <ul>
+          <li><b>La estructura que convierte (siempre la misma):</b> promesa de transformación (con número) → 3–6 dolores → 3–6 beneficios → producto → oferta + ahorro → bonus → garantía → testimonios → FAQ → CTA.</li>
+          <li><b>Vendé TRANSFORMACIÓN, no características.</b> Y <b>nunca pongas "50% OFF"</b> → decí "te ahorrás $30.000".</li>
+          <li>Escasez: "últimos 3 cupos", "el precio va a subir", "31 personas viendo esto", "reservado 15 min".</li>
+          <li><b>Se crea pimponeando con Claude:</b> le pegás una plantilla de abajo + tu oferta y adapta copy, colores y estructura.</li>
+          <li><b>Quiz funnel</b> con Inlead (16 preguntas → el que llega al final convierte 25–30%). <b>Optimizá imágenes</b> (Squoosh→TinyPNG) y poné <b>lazy load</b>.</li>
+          <li><b>VSL:</b> avatar de IA + hosting en PandaVideo (barra ficticia + reanudar + liviano). Cortá silencios + b-rolls cada 3–5 s.</li>
+        </ul>
+        <div class="tpls">
+          <div class="tpl-lead">Plantillas HTML — código real de Santi</div>
+          <details class="disc">
+            <summary><span class="disc-ic">EN</span><span class="disc-t"><b>Ebook-Lander · Habla Inglesa</b><span>14 secciones completas</span></span><span class="disc-act"></span></summary>
+            <div class="code" style="margin:0;border:none;border-top:1px solid var(--line)"><div class="code-head"><span class="lbl">ebook-lander-ingles.html</span><button class="copy">Copiar</button></div><pre class="tpl">Plantilla HTML completa disponible como archivo aparte. Pedísela a quien te compartió esta guía o descargá el paquete de plantillas.</pre></div>
+          </details>
+          <details class="disc">
+            <summary><span class="disc-ic">ES</span><span class="disc-t"><b>Ebook-Lander · Habla Hispana / LATAM</b><span>estructura completa</span></span><span class="disc-act"></span></summary>
+            <div class="code" style="margin:0;border:none;border-top:1px solid var(--line)"><div class="code-head"><span class="lbl">ebook-lander-hispano.html</span><button class="copy">Copiar</button></div><pre class="tpl">Plantilla HTML completa disponible como archivo aparte. Pedísela a quien te compartió esta guía o descargá el paquete de plantillas.</pre></div>
+          </details>
+          <details class="disc">
+            <summary><span class="disc-ic">EC</span><span class="disc-t"><b>Landing Tipo E-commerce · LATAM</b><span>tema naranja fuego</span></span><span class="disc-act"></span></summary>
+            <div class="code" style="margin:0;border:none;border-top:1px solid var(--line)"><div class="code-head"><span class="lbl">landing-tipo-ecommerce.html</span><button class="copy">Copiar</button></div><pre class="tpl">Plantilla HTML completa disponible como archivo aparte. Pedísela a quien te compartió esta guía o descargá el paquete de plantillas.</pre></div>
+          </details>
+        </div>
+        <div class="res">
+          <div class="res-line"><span class="tag cls">Clases</span><div class="items">
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/7090091" target="_blank" rel="noopener"><span class="ic">▶</span> Estructura de Página</a>
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/10049321" target="_blank" rel="noopener"><span class="ic">▶</span> Quiz Funnel</a>
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/7118594" target="_blank" rel="noopener"><span class="ic">▶</span> Optimización Imágenes</a>
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/10238747" target="_blank" rel="noopener"><span class="ic">▶</span> VSL</a>
+          </div></div>
+          <div class="res-line"><span class="tag tool">Tools</span><div class="items"><b style="color:var(--paper)">Claude</b> (HTML) · Inlead · <a class="lk" href="https://squoosh.app" target="_blank" rel="noopener">Squoosh</a> · <a class="lk" href="https://tinypng.com" target="_blank" rel="noopener">TinyPNG</a> · <a class="lk" href="https://www.pandavideo.com" target="_blank" rel="noopener">PandaVideo</a></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="step rv">
+      <div class="step-top"><div class="step-n">06</div><div><h2>Lanzá el testeo acelerado</h2><div class="kicker">MVP + campaña ABO · descartá al 3er-4to día</div></div></div>
+      <div class="step-body">
+        <ul>
+          <li>Checkout: <b>ImpulsaTienda</b> (trae sus propios videos de setup y píxeles) o Shopify. <b>Sin upsells pre-compra.</b></li>
+          <li>Producto en <b>MVP</b>. El completo se hace después de validar.</li>
+          <li><b>Testeo acelerado:</b> campaña <b>ABO, 5 ad sets</b> (1 creativo c/u), presupuesto <b>1.5× el ticket</b> por ad set (ej. $20 → $30).</li>
+          <li><b>Regla de corte:</b> el ad set que llega al CPA objetivo (medio ticket) <b>sin vender → se corta</b>. Lo que vende, se surfea. Positivo el primer día.</li>
+          <li>Testeá <b>mínimo 20 anuncios</b> antes de matar una oferta. Sacá <b>3–4 ofertas/semana</b> · ~$100 por oferta.</li>
+        </ul>
+        <div class="metricbox">
+          <div class="h">La matemática que te hace libre — RPC / CPC</div>
+          <pre>Si ganás más por click de lo que pagás, <b>imprimís dinero.</b>
+CTR bueno: <b>1.5%+</b>  ·  Carga web = visitas ÷ clics ≈ <b>80%+</b>  ·  lazy load siempre.
+Ejemplo $15 front, costo x visita $0.25, 1000 visitas = $250:
+   1.5% → $225 (negativo)   2% → <span class="g">$300</span>   2.5% → <span class="g">$375</span>
+El front NO importa: importa el <b>BACKEND</b>. Vendé barato ($9, menos fricción,
++conversión) y que el backend suba el AOV (de $17 a $33). Si el tráfico está caro,
+perdés aunque el AOV sea alto → cambiá de cuenta publicitaria y mejorá creativos.</pre>
+        </div>
+        <div class="res">
+          <div class="res-line"><span class="tag cls">Clases</span><div class="items">
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/7051774" target="_blank" rel="noopener"><span class="ic">▶</span> Salir a Validar</a>
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/10454868" target="_blank" rel="noopener"><span class="ic">▶</span> Testeo Acelerado</a>
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/8899501" target="_blank" rel="noopener"><span class="ic">▶</span> La Matemática</a>
+          </div></div>
+          <div class="res-line"><span class="tag tool">Tools</span><div class="items">ImpulsaTienda · Meta Ads Manager · <a class="lk" href="https://chatgpt.com/g/g-69a3390cf6dc8191b594a348f017babe-rentabler" target="_blank" rel="noopener">GPT Rentabler</a></div></div>
+          <div class="res-line"><span class="tag doc">Doc</span><div class="items"><a class="lk" href="https://docs.google.com/document/d/1r1Bfy6sixyf-QFKKXarzQhRFAwp2PjQrttwNVbwbzNY/edit" target="_blank" rel="noopener">Campaña de Mensajes (WhatsApp)</a></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section class="step val rv">
+      <div class="step-top"><div class="step-n">07</div><div><h2>Al validar: backend post-pago</h2><div class="kicker">Solo cuando la oferta pega</div></div></div>
+      <div class="step-body">
+        <ul>
+          <li>Creá <b>5–6 productos complementarios</b>. <b>30–40% de las compras entran con un adicional</b> si está bien presentado.</li>
+          <li><b>El método = todo POST-PAGO:</b> vía ImpulsaTienda armás <b>3 OTOs con VSL + downsell al 50%</b> → AOV ≈ 1.5× el front. (Order bump pre-checkout = opcional.)</li>
+          <li>De dónde sacar los adicionales: <b>espiá los order bumps del competidor</b> y <b>comprale la oferta</b> para ver sus upsells.</li>
+          <li>Producto completo con Claude (skill <b>ebook-higgsfield</b> arma el PDF conectando Claude + Higgsfield).</li>
+        </ul>
+        <p class="quote">"Acá no vendemos un producto: vendemos uno, lo validamos, y después agregamos 6, 7… los que sean necesarios."</p>
+        <div class="code">
+          <div class="code-head"><span class="lbl">Prompt · backend completo (5 bumps + OTOs + downsell)</span><button class="copy">Copiar</button></div>
+          <pre>Asume el rol de un Estratega Senior de Monetización y Arquitecto de Embudos Low-Ticket ("Funnel Stacker"). Experto en psicología de micro-compromisos y maximización del AOV.
+CONTEXTO: oferta Low-Ticket a tráfico frío. TODOS los entregables son PDF / LECTURA / PLANTILLAS (no video cursos).
+MISIÓN — diseñar: 1) 5 Order Bumps (pre-compra), 2) 1 OTO 1 (post-pago, mayor valor), 3) 1 Downsell (si rechazan OTO 1), 4) 1 OTO 2 (si compran OTO 1).
+INSUMOS: usa los adjuntos (Avatar, Offer Brief, Investigación, Landing) para alinear con los dolores reales.
+REGLAS: formato PDF estricto (Ebook, Workbook, Checklist, Swipe File, Script, Plantilla, SOP). Los 5 bumps con ángulos distintos (velocidad, seguridad, automatización, inspiración, legalidad).
+Escalera de valor: Bumps $7-27 · OTO1 $47-97 ("la Biblia") · Downsell $27-37 · OTO2 $37-67.
+SALIDA: 1) Análisis del Gap. 2) 5 bumps (Nombre PDF, Concepto, Micro-copy del checkbox, Precio). 3) Backend: OTO1, Downsell, OTO2 (nombre, promesa, entregables, precio). 4) Resumen de la lógica.
+INSTRUCCIÓN: No generes nada todavía. Pedime que suba los archivos. Luego analizá el producto base y diseñá el ecosistema.</pre>
+        </div>
+        <div class="res">
+          <div class="res-line"><span class="tag cls">Clases</span><div class="items">
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/7052003" target="_blank" rel="noopener"><span class="ic">▶</span> Backend que sube el ROAS</a>
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/10231901" target="_blank" rel="noopener"><span class="ic">▶</span> Ebooks con Claude+Higgsfield</a>
+          </div></div>
+          <div class="res-line"><span class="tag doc">Docs</span><div class="items"><a class="lk" href="https://docs.google.com/document/d/1eySJzjLsuojuh3cWeI34inVubQjO__nJUHxm_fCMns8/edit" target="_blank" rel="noopener">Prompt Upsells</a> · <a class="lk" href="https://drive.google.com/file/d/17ByEWVUiKRcn7XTUnQA6TCnJdqqUYHLJ/view" target="_blank" rel="noopener">skill ebook-higgsfield</a></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8 -->
+    <section class="step val rv">
+      <div class="step-top"><div class="step-n">08</div><div><h2>Escalá</h2><div class="kicker">BidCap · CostCap · Intra-pujas · renovación diaria</div></div></div>
+      <div class="step-body">
+        <ul>
+          <li><b>BidCap acelerada (CBO, manual):</b> 1 conjunto por anuncio winner, entrega Acelerada, <b>bid = precio del front</b>. Si no gasta, +$0.50 cada hora.</li>
+          <li><b>CostCap (ABO, 7 conjuntos):</b> bid = CPA objetivo (medio ticket), 3 arriba y 3 abajo. <b>CostCap y BidCap = misma estructura.</b></li>
+          <li><b>Intra-puja:</b> detectada la puja ganadora (bid 10), la duplicás <b>×9</b> → 10.1…10.9 para hallar más winners. Si sale otra (10.6) → 10.61…10.69.</li>
+          <li><b>Renovación de creativos diaria:</b> variaciones de hooks · nuevos formatos · nuevos ángulos. Y seguí lanzando ofertas nuevas.</li>
+        </ul>
+        <div class="res">
+          <div class="res-line"><span class="tag cls">Clases</span><div class="items">
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/10427624" target="_blank" rel="noopener"><span class="ic">▶</span> CostCap + BidCap + Intrapuja</a>
+            <a class="watch" href="https://www.santiagobilbao.com.ar/school/course/vip-launch-expert/lecture/7140292" target="_blank" rel="noopener"><span class="ic">▶</span> Variaciones de Hooks</a>
+          </div></div>
+          <div class="res-line"><span class="tag doc">Doc</span><div class="items"><a class="lk" href="https://docs.google.com/spreadsheets/d/1oH6ZM-Q5LarqB2pT0A1Eq8S69IUY3rMy3KM8qObFnYs/edit" target="_blank" rel="noopener">Plan de Campañas / Escala</a> <span>(CBO NEW → ACELERADA → COSCAP → ROAS)</span></div></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- MANIFESTO -->
+  <div class="manifesto rv">
+    <div class="in">
+      <p class="q">Mientras no pegues una oferta, tu único trabajo es <b>sacar 3–4 por semana</b>. Cuando una pegue: <b>backend primero, escala después</b>, y creativos nuevos todos los días.</p>
+      <p class="sub">$100 y una semana por oferta. No aceptes la persona cómoda de una sola oferta corriendo. Ese es el camino de 0 a 40K/mes neto.</p>
+    </div>
+  </div>
+
+  <div class="sec-label rv">El stack de herramientas</div>
+  <div class="tools rv">
+    <a class="tool" href="https://www.facebook.com/ads/library/" target="_blank" rel="noopener"><span class="tn">Ad Library</span><span class="td">Espionaje base de ofertas</span></a>
+    <a class="tool" href="https://adsparo.com" target="_blank" rel="noopener"><span class="tn">Adsparo</span><span class="td">Scraper de anuncios (su favorito)</span></a>
+    <a class="tool" href="https://promptcowboy.ai" target="_blank" rel="noopener"><span class="tn">PromptCowboy</span><span class="td">Convierte prompts vagos en buenos</span></a>
+    <a class="tool" href="https://squoosh.app" target="_blank" rel="noopener"><span class="tn">Squoosh</span><span class="td">Comprimir imágenes a WebP</span></a>
+    <a class="tool" href="https://tinypng.com" target="_blank" rel="noopener"><span class="tn">TinyPNG</span><span class="td">Segundo pase de compresión</span></a>
+    <a class="tool" href="https://www.pandavideo.com" target="_blank" rel="noopener"><span class="tn">PandaVideo</span><span class="td">Hosting de VSL (barra ficticia)</span></a>
+    <a class="tool" href="https://chatgpt.com/g/g-69a3390cf6dc8191b594a348f017babe-rentabler" target="_blank" rel="noopener"><span class="tn">GPT Rentabler</span><span class="td">Calcula rentabilidad del funnel</span></a>
+    <a class="tool" href="https://claude.ai" target="_blank" rel="noopener"><span class="tn">Claude</span><span class="td">El motor de todo el método</span></a>
+  </div>
+
+  <footer>
+    <b>Playbook Launch Expert</b> — método de Santi Bilbao, para uso y estudio. Las clases (▶) se ven en la academia; los <b>prompts</b> y <b>plantillas HTML</b> son para copiar y adaptar a tu propia oferta. 22 clases transcritas en el cerebro ORIGEN.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var g=document.getElementById("gate"),em=document.getElementById("gemail"),chk=document.getElementById("gchk"),btn=document.getElementById("gbtn"),err=document.getElementById("gerr"),wm=document.getElementById("wm"),wmail=document.getElementById("wmail");
+  var re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  function grant(m){localStorage.setItem("pb_email",m);g.classList.add("hide");document.body.classList.remove("gated");wmail.textContent=m;wm.style.display="block";}
+  var s=localStorage.getItem("pb_email");
+  if(s&&re.test(s)){grant(s);}else{em.focus();}
+  function sub(){var v=(em.value||"").trim().toLowerCase();if(!re.test(v)){err.textContent="Ingresá un correo válido.";return;}if(!chk.checked){err.textContent="Tenés que aceptar el compromiso.";return;}err.textContent="";grant(v);}
+  btn.addEventListener("click",sub);
+  em.addEventListener("keydown",function(e){if(e.key==="Enter")sub();});
+})();
+
+  // copiar
+  document.querySelectorAll('.copy').forEach(function(b){
+    b.addEventListener('click',function(){
+      var pre=b.closest('.code').querySelector('pre');
+      navigator.clipboard.writeText(pre.innerText).then(function(){
+        var t=b.textContent;b.textContent='✓ Copiado';b.classList.add('ok');
+        setTimeout(function(){b.textContent=t;b.classList.remove('ok')},1500);
+      });
+    });
+  });
+  // reveal on scroll
+  var rm=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!rm && 'IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+    document.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+  } else { document.querySelectorAll('.rv').forEach(function(el){el.classList.add('in')}); }
+  // count-up 0 -> 40
+  (function(){
+    var el=document.querySelector('.fig-num'); if(!el) return;
+    var target=+el.getAttribute('data-count');
+    if(rm){el.textContent=target; return;}
+    var started=false;
+    var io2=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting && !started){started=true;var t0=null;
+        function step(ts){if(!t0)t0=ts;var p=Math.min((ts-t0)/1100,1);
+          el.textContent=Math.round(p*target);if(p<1)requestAnimationFrame(step);}
+        requestAnimationFrame(step);}
+    })},{threshold:.5});
+    io2.observe(el);
+  })();
+</script>
+
+</body>
+</html>
